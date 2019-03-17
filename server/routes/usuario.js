@@ -6,11 +6,15 @@ const _ = require('underscore')
 
 // Importamos el Schema de usuario
 const Usuario = require('../models/usuario');
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion')
 const app = express();
 
 
 
-app.get('/usuario', function(req, res) {
+app.get('/usuario', [verificaToken], (req, res) => {
+
+
+
 
     // si viene el registro de inicio desde y si no 0
     let desde = req.query.desde || 0;
@@ -19,6 +23,7 @@ app.get('/usuario', function(req, res) {
     limite = parseInt(limite);
 
     Usuario.find({ estado: true }, 'nombre email role estado google img')
+        .skip(desde)
         .limit(limite)
 
     .exec((err, usuarios) => {
@@ -43,7 +48,7 @@ app.get('/usuario', function(req, res) {
     //res.json('get usuario Local!!');
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin_Role], (req, res) => {
     let body = req.body;
 
     // vamos a grabar lo que recibimos en la base de datos a traves del schema 
@@ -75,7 +80,7 @@ app.post('/usuario', function(req, res) {
 
 
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     let id = req.params.id;
 
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado'])
@@ -130,7 +135,7 @@ app.put('/usuario/:id', function(req, res) {
 
 });*/
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     id = req.params.id;
     Usuario.findByIdAndUpdate(id, { estado: 'false' }, { new: true }, (err, usuarioDb) => {
