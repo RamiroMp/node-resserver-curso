@@ -12,6 +12,9 @@
 </head>
 
 <body>
+
+    <!-- <img src="http://localhost:3000/imagen/usuarios/5c7236997c53b403f8227c29-597.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7Im5vbWJyZSI6InRlc3QxIiwiZW1haWwiOiJ0ZXN0MUBnbWFpbC5jb20iLCJpbWciOiI1YzcyMzY5OTdjNTNiNDAzZjgyMjdjMjktNTk3LnBuZyIsInJvbGUiOiJBRE1JTl9ST0xFIiwiZXN0YWRvIjp0cnVlLCJnb29nbGUiOmZhbHNlLCJfaWQiOiI1YzcyMzY5OTdjNTNiNDAzZjgyMjdjMjkifSwiaWF0IjoxNTU0NTc4MzAwLCJleHAiOjE1NTQ3NTExMDB9.yMyo8LmbJXhNPCMPGQKufXdxIWMe0uISNS_1Vc-gdPM"-->
+    alt="">
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <a href="#" onclick="signOut();">Sign out</a>
 
@@ -25,6 +28,7 @@
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
             var id_token = googleUser.getAuthResponse().id_token;
+            console.log(id_token);
 
             // Enviamos al back end el token de ggogle
             var xhr = new XMLHttpRequest();

@@ -64,7 +64,6 @@ app.post('/login', (req, res) => {
 
 
 // Configuraciones de Google. verificamos el token
-
 async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
@@ -78,10 +77,13 @@ async function verify(token) {
         nombre: payload.name,
         email: payload.email,
         img: payload.picture,
-        goggle: true
+        google: true
     }
 
+
 }
+
+
 
 
 
@@ -94,8 +96,8 @@ app.post('/google', async(req, res) => {
             return res.status(403).json({
                 ok: false,
                 err: e
-            })
-        })
+            });
+        });
 
     Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
 
@@ -103,29 +105,29 @@ app.post('/google', async(req, res) => {
             return res.status(500).json({
                 ok: false,
                 err
-            })
-        }
+            });
+        };
 
         if (usuarioDB) {
             // revisar si se ha auteticado por google
             if (usuarioDB.goggle === false) {
-                res.status(400).json({
+                return res.status(400).json({
                     ok: false,
                     err: {
                         message: 'Debe usar la autenticacion normal'
                     }
-                })
+                });
 
             } else {
                 let token = jwt.sign({
                     usuario: usuarioDB
                 }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
 
-                return res.status().json({
+                return res.status(200).json({
                     ok: true,
-                    usuarioDB,
+                    usuario: usuarioDB,
                     token
-                })
+                });
 
             }
 
@@ -147,7 +149,7 @@ app.post('/google', async(req, res) => {
                         err
 
                     });
-                }
+                };
 
                 let token = jwt.sign({
                     usuario: usuarioDB
@@ -171,11 +173,9 @@ app.post('/google', async(req, res) => {
 
 
 
-    })
+    });
 
-    //res.json({
-    //    usuario: googleUser
-    //})
+
 
 
 
